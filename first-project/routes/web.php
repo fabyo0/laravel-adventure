@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use GuzzleHttp\Psr7\Request;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ContactController;
+
+//Home,about ve contact controller oluşturuldu view kısmına yönledirildi
 
 /*
 |--------------------------------------------------------------------------
@@ -15,13 +18,21 @@ use GuzzleHttp\Psr7\Request;
 |
 */
 
+//TODO: Route name vererek name kullanabiliriz
+
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
-Route::get('/hello', function () {
-    return view('home/index');
-});
+/*Route::get('/hello', function () {
+    return view('front/index');
+});*/
+
 //TODO: routemzı da array olarak controller sınıfımızı çağırabilir
 // route/class/function
-Route::get('/home', [HomeController::class, 'index']);
+
+Route::get('/front', [HomeController::class, 'index'])->name('index');
+
+Route::get('/about',[AboutController::class,'about'])->name('about');
+
+Route::get('/contact',[ContactController::class,'contact'])->name('contact');
