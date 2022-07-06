@@ -40,7 +40,7 @@ class HomeController extends Controller
 
         //form alanlarımızı requestden gelen alanlara eşitledik
 
-        $name = $request->name;
+        $name = $request->title;
         $content = $request->content;
         $status = $request->status;
 
@@ -50,16 +50,13 @@ class HomeController extends Controller
             'status' => $status ?? 0
         ];
 
-
-        //Fortify ile login register işlemşeri yapıldı ve makaleler tablosu oluşturulup ekleme yapıldı
-
         // insert posts
 
         Posts::create($data);
 
         //TODO : post türetip insert işlemi yaptık
 
-        /*        $post = new Posts();
+        /*     $post = new Posts();
 
                 $post->name = $name;
                 $post->content = $content;
