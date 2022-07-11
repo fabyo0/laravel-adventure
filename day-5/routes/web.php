@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\FrontController;
+use App\Http\Controllers\Auth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,16 +15,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 // blog routes
-Route::get('/', 'FrontController@index')->name('index');
-Route::get('/about', 'FrontController@about')->name('about');
-Route::get('/blog', 'FrontController@blog')->name('blog');
-Route::get('/contact', 'FrontController@contact')->name('contact');
+Route::get('/', [FrontController::class,'index'])->name('index');
+Route::get('/about', [FrontController::class,'about'])->name('about');
+Route::get('/blog', [FrontController::class,'blog'])->name('blog');
+Route::get('/contact', [FrontController::class,'contact'])->name('contact');
 
-
+//  admin routes
 Route::get('admin',function (){
     return view('layouts.admin');
 });
 
 //login routes
-Route::get('login', 'Auth\LoginController@showLogin')->name('login');
-Route::post('login', 'Auth\LoginController@login');
+Route::get('login', [LoginController::class,'showLogin'])->name('login');
+Route::post('login',[LoginController::class,'login']);

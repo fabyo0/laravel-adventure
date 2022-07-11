@@ -15,14 +15,16 @@ class LoginRequest extends FormRequest
     // Validate kuralları
     public function rules()
     {
+        // form içerisindeki name göre validate edildi
         return [
             'email' => 'required|min:3|max:255',
             'password' => 'required|min:3|max:20'
         ];
     }
-    // validate mesajları
+
     public function messages()
     {
+        //TODO: validate mesajları default olarak lang/en içerisinden gönderilir
         return [
             'email.required' => 'Lütfen email adresinizi girin',
             'email.min' => 'Minimum email alanı için 3 karakter girmelisiniz.',

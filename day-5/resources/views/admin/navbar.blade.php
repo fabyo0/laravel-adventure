@@ -8,23 +8,23 @@
         <div class="collapsible-body">
             <ul>
                 <li>
-                    <a href="{{ route('admin.post.add') }}">
+                    <a href="#">
                         <i class="material-icons dp48">queue</i>
                         <span class="hide-menu"> Makale Ekle </span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.post.list') }}" ><i class="material-icons dp48">view_list</i>
+                    <a href="#"><i class="material-icons dp48">view_list</i>
                         <span class="hide-menu"> Makale Listesi </span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('tag.index')}}"><i class="material-icons dp48">view_list</i>
+                    <a href=#><i class="material-icons dp48">view_list</i>
                         <span class="hide-menu"> Etiket Listesi </span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('category.index')}}"><i class="material-icons dp48">view_list</i>
+                    <a href=#><i class="material-icons dp48">view_list</i>
                         <span class="hide-menu"> Kategori Listesi </span>
                     </a>
                 </li>
@@ -40,7 +40,7 @@
         <div class="collapsible-body">
             <ul>
                 <li>
-                    <a href="{{ route('admin.viewProfile') }}">
+                    <a href="#">
                         <i class="material-icons dp48">portrait</i>
                         <span class="hide-menu"> Profilim </span>
                     </a>
