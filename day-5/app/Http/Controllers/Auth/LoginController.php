@@ -12,6 +12,10 @@ class LoginController extends Controller
 {
     public function showLogin()
     {
+        // giris yapılmısa admin yönlendirdik
+        if (Auth::check()) {
+            return redirect()->route('admin.index');
+        }
         return view('auth.login');
     }
 
@@ -31,15 +35,19 @@ class LoginController extends Controller
         if ($user && Hash::check($password, $user->password)) {
             // kullanıcı login- rememeber true ise token oluşturuldu
             Auth::login($user, true);
-            return redirect('/admin');
+            return redirect()->route('admin.index');
 
         } else {
             alert()->error('Uyarı', 'Kullanıcı adı veya şifreniz yanlış.')
                 ->showConfirmButton('Tamam', '#3085d6');
             return redirect('login');
         }
-
-        //email ve password gönderildiğinde doğrudan login yapmış oluruz
-        Auth::attempt(['email' => $request->email, 'password' => $request->password]);
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    }
+
 }

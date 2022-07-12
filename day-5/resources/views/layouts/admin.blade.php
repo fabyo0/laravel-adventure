@@ -28,7 +28,7 @@
     <div class="preloader">
         <div class="loader">
             <div class="loader__figure"></div>
-            <p class="loader__label">Yazılım Eğitim Admin Panel</p>
+            <p class="loader__label">Admin Panel</p>
         </div>
     </div>
     <header class="topbar">
@@ -74,8 +74,6 @@
                                         <img src="{{asset('assets/backEnd/images/users/2.jpg')}}" alt="user">
                                     </div>
                                     <div class="u-text">
-                                        <h4>{{ auth()->user()->name }}</h4>
-                                        <p>{{ auth()->user()->email }}</p>
                                         <a href="{{route('admin.viewProfile')}}"
                                            class="waves-effect waves-light btn-small red white-text">
                                             Profilim

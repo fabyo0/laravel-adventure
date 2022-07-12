@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AdminController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,16 +17,20 @@ use App\Http\Controllers\Auth\LoginController;
 */
 
 // blog routes
-Route::get('/', [FrontController::class,'index'])->name('index');
-Route::get('/about', [FrontController::class,'about'])->name('about');
-Route::get('/blog', [FrontController::class,'blog'])->name('blog');
-Route::get('/contact', [FrontController::class,'contact'])->name('contact');
+Route::get('/', [FrontController::class, 'index'])->name('index');
+Route::get('/about', [FrontController::class, 'about'])->name('about');
+Route::get('/blog', [FrontController::class, 'blog'])->name('blog');
+Route::get('/contact', [FrontController::class, 'contact'])->name('contact');
 
 //  admin routes
-Route::get('admin',function (){
-    return view('layouts.admin');
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/view-profile', [AdminController::class, 'viewProfile'])
+        ->name('admin.viewProfile');
+    Route::put('/view-profile', [AdminController::class, 'viewProfileUpdate']);
 });
 
 //login routes
-Route::get('login', [LoginController::class,'showLogin'])->name('login');
-Route::post('login',[LoginController::class,'login']);
+Route::get('login', [LoginController::class, 'showLogin'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');

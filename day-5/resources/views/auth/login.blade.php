@@ -24,9 +24,10 @@
     <div class="preloader">
         <div class="loader">
             <div class="loader__figure"></div>
-            <p class="loader__label">Material Admin</p>
+            <p class="loader__label">Login Page</p>
         </div>
     </div>
+    {{auth()->check()}}
     <div class="auth-wrapper d-flex no-block justify-content-center align-items-center"
          style="background:url('{{ asset('assets/backEnd/images/big/auth-bg.jpg') }}') no-repeat center center;">
         <div class="auth-box">
