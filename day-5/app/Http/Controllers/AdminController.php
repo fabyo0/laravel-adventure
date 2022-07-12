@@ -31,35 +31,44 @@ class AdminController extends Controller
     // profile güncelleme
     public function viewProfileUpdate(ProfileUpdateRequest $request)
     {
-       $name = $request->name;
-       $email = $request->email;
-       $password = $request->password;
+        $name = $request->name;
+        $email = $request->email;
+        $password = $request->password;
 
-       // eloquent model güncelleme
-       $userID= Auth::id();
-       //$user = User::where('id',$userID)->first();
-       $user = User::find($userID);
-        ddd($user);
-       $user->name = $name;
-       $user->email = $email;
+        // eloquent model güncelleme
+        $userID = Auth::id();
 
-       if ($password){
-           $user->password = bcrypt($password);
-       }
-       $user->save();
+        // email duplicate
 
-       // Model üzerinden güncelleme yapmak
-       /*$data = [
-         'email' => $email,
-         'name' => $password
-       ];
+        $duplicateControl = User::where('email', '!=', auth()->user()->email)
+            ->where('email', $email)
+            ->first();
 
-       if ($password){
-           $data['password'] = bcrypt($password);
-       }
-       User::where('id',$userID)->update($data);*/
+        if ($duplicateControl) {
+            alert()->error('Uyarı', 'Daha önce girilen email adresi kullanılmış')
+                ->showConfirmButton('Tamam', '#3085d6');
+            return redirect()->route('admin.viewProfile');
+        }
 
+        $user = User::find($userID);
 
+        $user->name = $name;
+        $user->email = $email;
 
+        if ($password) {
+            $user->password = bcrypt($password);
+        }
+        $user->save();
+
+        // Model üzerinden güncelleme yapmak
+        /*$data = [
+          'email' => $email,
+          'name' => $password
+        ];
+
+        if ($password){
+            $data['password'] = bcrypt($password);
+        }
+        User::where('id',$userID)->update($data);*/
     }
 }
