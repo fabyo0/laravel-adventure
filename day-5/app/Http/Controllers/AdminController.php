@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -31,6 +31,35 @@ class AdminController extends Controller
     // profile güncelleme
     public function viewProfileUpdate(ProfileUpdateRequest $request)
     {
-        dd($request->all());
+       $name = $request->name;
+       $email = $request->email;
+       $password = $request->password;
+
+       // eloquent model güncelleme
+       $userID= Auth::id();
+       //$user = User::where('id',$userID)->first();
+       $user = User::find($userID);
+        ddd($user);
+       $user->name = $name;
+       $user->email = $email;
+
+       if ($password){
+           $user->password = bcrypt($password);
+       }
+       $user->save();
+
+       // Model üzerinden güncelleme yapmak
+       /*$data = [
+         'email' => $email,
+         'name' => $password
+       ];
+
+       if ($password){
+           $data['password'] = bcrypt($password);
+       }
+       User::where('id',$userID)->update($data);*/
+
+
+
     }
 }
