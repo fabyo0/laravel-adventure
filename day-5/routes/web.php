@@ -28,6 +28,18 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/view-profile', [AdminController::class, 'viewProfile'])
         ->name('admin.viewProfile');
     Route::put('/view-profile', [AdminController::class, 'viewProfileUpdate']);
+
+    // admin posts
+    Route::prefix('post')->group(function () {
+        Route::get('/add', function () {
+            return view('admin.post_add');
+        })->name('admin.post.add');
+
+        Route::get('/list', function () {
+            return view('admin.post_list');
+        })->name('admin.post.list');
+    });
+
 });
 
 //login routes

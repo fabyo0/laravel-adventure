@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
@@ -59,6 +58,10 @@ class AdminController extends Controller
             $user->password = bcrypt($password);
         }
         $user->save();
+
+        alert()->success('Başarılı', 'Profil başarıyla güncellendi...')
+            ->showConfirmButton('Tamam', '#3085d6');
+        return redirect()->route('admin.viewProfile');
 
         // Model üzerinden güncelleme yapmak
         /*$data = [
