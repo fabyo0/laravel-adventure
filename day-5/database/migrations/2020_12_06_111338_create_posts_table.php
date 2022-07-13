@@ -13,8 +13,7 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table)
-        {
+        Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('content');
@@ -26,16 +25,17 @@ class CreatePostsTable extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->dateTime('publish_date')->nullable();
 
+            // posts tablosu ile users tablosunu 'user_id' üzerinden ilişkilendirdik
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
 
+            // posts tablosu ile category tablosunu 'post_category' üzerinden ilişkilendirdik
             $table->foreign('category_id')
                 ->references('id')
                 ->on('post_category')
                 ->onDelete('cascade');
-
 
             $table->timestamps();
         });

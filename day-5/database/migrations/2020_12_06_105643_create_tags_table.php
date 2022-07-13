@@ -19,9 +19,11 @@ class CreateTagsTable extends Migration
             $table->tinyInteger('status')->default(0);
             $table->bigInteger('user_id')->unsigned();
 
+            // tags tablosu ile users tablosunu 'user_id' üzerinden ilişkilendirdik
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
+                // ilgili user silindiğinde tags tablosundan da silinecek
                 ->onDelete('cascade');
 
             $table->timestamps();

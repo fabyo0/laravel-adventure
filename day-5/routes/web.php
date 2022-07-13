@@ -38,6 +38,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('/list', function () {
             return view('admin.post_list');
         })->name('admin.post.list');
+
+        Route::get('/tags',function (){
+           return view('admin.tag_list');
+        })->name('admin.tag.list');
+
+        Route::get('/categories',function (){
+            return view('admin.category_list');
+        })->name('admin.categories.list');
+
     });
 
 });

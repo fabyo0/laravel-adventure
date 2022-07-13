@@ -19,12 +19,12 @@
                     </a>
                 </li>
                 <li>
-                    <a href=#><i class="material-icons dp48">view_list</i>
+                    <a href="{{ route('admin.tag.list') }}"><i class="material-icons dp48">view_list</i>
                         <span class="hide-menu"> Etiket Listesi </span>
                     </a>
                 </li>
                 <li>
-                    <a href=#><i class="material-icons dp48">view_list</i>
+                    <a href="{{ route('admin.categories.list') }}"><i class="material-icons dp48">view_list</i>
                         <span class="hide-menu"> Kategori Listesi </span>
                     </a>
                 </li>
