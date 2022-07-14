@@ -17,7 +17,6 @@
                         <i class="material-icons">add</i>
                     </a>
                     <!-- Modal Trigger -->
-
                     <table class="responsive-table">
                         <thead>
                         <tr>
@@ -43,7 +42,6 @@
         </div>
     </div>
 @endsection
-
 
 <!-- Modal Structure -->
 
@@ -123,6 +121,5 @@
                 $('#frmCategory').submit();
             }
         });
-
     </script>
 @endsection

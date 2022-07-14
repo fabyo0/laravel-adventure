@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\PostCategory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -24,6 +28,7 @@ class CategoryController extends Controller
      */
     public function create(Request $request)
     {
+        //
     }
 
     /**
@@ -34,7 +39,27 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        // insert category
+
+        $name = $request->name;
+        $description = $request->description;
+        $status = $request->status;
+
+        $user = Auth::user();
+
+        $data = [
+            'name' => $name,
+            'description' => $description,
+            'status' => $status ? 1 : 0,
+            'user_id' => $user->id
+        ];
+
+         PostCategory::create($data);
+
+        alert()->success('Başarılı', 'Kategori başarıyla eklendi...')
+            ->showConfirmButton('Tamam', '#3085d6');
+
+        return redirect()->route('category.index');
     }
 
     /**
