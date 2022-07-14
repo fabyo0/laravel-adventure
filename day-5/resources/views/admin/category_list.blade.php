@@ -43,8 +43,7 @@
         </div>
     </div>
 @endsection
-@section('js')
-@endsection
+
 
 <!-- Modal Structure -->
 
@@ -54,11 +53,11 @@
             <div class="card-content">
                 <h5 class="card-title activator">Kategori Ekle
                     <i class="material-icons right tooltipped"
-                     data-position="left" data-delay="50"
-                     data-tooltip="Get Code">more_vert</i>
+                       data-position="left" data-delay="50"
+                       data-tooltip="Get Code">more_vert</i>
                 </h5>
-                <form id="frmCategory" action="" method="POST">
-                 @csrf
+                <form id="frmCategory" action="{{ route('category.store') }}" method="POST">
+                    @csrf
                     <div class="row">
                         <div class="input-field col s12">
                             <i class="material-icons prefix">account_circle</i>
@@ -103,3 +102,27 @@
     </div>
 </div>
 <!-- Modal Structure -->
+@section('js')
+    <script !src="">
+
+        // category validate
+
+        $('#btnSave').click(function () {
+
+            let name = $('#name').val();
+
+            if (name.trim() === '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Uyarı',
+                    text: 'Lütfen kategori adını boş bırakmayınız!',
+                    confirmButtonText: 'Tamam'
+                });
+
+            } else {
+                $('#frmCategory').submit();
+            }
+        });
+
+    </script>
+@endsection
