@@ -24,11 +24,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.categories.list') }}"><i class="material-icons dp48">view_list</i>
+                    <a href="{{ route('category.index') }}"><i class="material-icons dp48">view_list</i>
                         <span class="hide-menu"> Kategori Listesi </span>
                     </a>
                 </li>
-
             </ul>
         </div>
     </li>

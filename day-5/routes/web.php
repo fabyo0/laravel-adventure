@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FrontController;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\FrontController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     // admin posts
     Route::prefix('post')->group(function () {
+
         Route::get('/add', function () {
             return view('admin.post_add');
         })->name('admin.post.add');
@@ -43,12 +45,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
            return view('admin.tag_list');
         })->name('admin.tag.list');
 
-        Route::get('/categories',function (){
-            return view('admin.category_list');
-        })->name('admin.categories.list');
+        Route::resource('category','Admin\CategoryController');
 
     });
-
 });
 
 //login routes
