@@ -18,7 +18,26 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.category_list');
+        // gerekli olan field alanlarını almak
+        //$getSingle = PostCategory::select('name','description')->get();
+
+        $listCategory = PostCategory::all();
+
+        // Model üzerinden direk join işlemi
+
+        /* $listCategory = PostCategory::join('users','users.id','=','post_category.user_id')
+        ->select('post_category.*','users.name as userName')
+        ->get();*/
+
+        //Query builder ile join işlemi
+        //TODO:  tek fark model üzerindeki değerle gelmeyecektir
+
+     /*   $listCategory = DB::table('post_category')
+            ->join('users' ,'users.id','=','post_category.user_id')
+            ->select('post_category.*','users.name as userName')
+            ->get();*/
+
+        return view('admin.category_list', compact('listCategory'));
     }
 
     /**
@@ -54,7 +73,7 @@ class CategoryController extends Controller
             'user_id' => $user->id
         ];
 
-         PostCategory::create($data);
+        PostCategory::create($data);
 
         alert()->success('Başarılı', 'Kategori başarıyla eklendi...')
             ->showConfirmButton('Tamam', '#3085d6');

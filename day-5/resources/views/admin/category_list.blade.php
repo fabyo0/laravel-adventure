@@ -30,11 +30,28 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Alvin</td>
-                            <td>Eclair</td>
-                            <td>$0.87</td>
-                        </tr>
+                        {{-- kategori listesini table içerisine iterate ettik  --}}
+                        @foreach($listCategory as $item)
+                            <tr>
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td>{{ $item->description }}</td>
+                                <td>{{ $item->getUser->name }}</td>
+
+                                <td>
+                                    @if($item->status)
+                                        <a class="waves-effect waves-light btn green changeStatus"
+                                        data-id = "{{ $item->id }}">Aktif</a>
+                                    @else
+                                        <a class="waves-effect waves-light btn red changeStatus"
+                                           data-id = "{{ $item->id }}">Pasif</a>
+                                    @endif
+
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i:s') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->updated_at)->format('d-m-Y H:i:s') }}</td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -103,23 +120,34 @@
 @section('js')
     <script !src="">
 
-        // category validate
+        $(document).ready(function (){
+            // category validate
 
-        $('#btnSave').click(function () {
+            $('#btnSave').click(function () {
 
-            let name = $('#name').val();
+                let name = $('#name').val();
 
-            if (name.trim() === '') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Uyarı',
-                    text: 'Lütfen kategori adını boş bırakmayınız!',
-                    confirmButtonText: 'Tamam'
-                });
+                if (name.trim() === '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Uyarı',
+                        text: 'Lütfen kategori adını boş bırakmayınız!',
+                        confirmButtonText: 'Tamam'
+                    });
 
-            } else {
-                $('#frmCategory').submit();
-            }
+                } else {
+                    $('#frmCategory').submit();
+                }
+            });
+
+            //ajax ile status durum değiştirme
+
+            $('.changeStatus').click(function (){
+                    // data id tıklandığında
+                    let dataID = $(this).data('id');
+                    alert(dataID);
+            });
+
         });
     </script>
 @endsection
