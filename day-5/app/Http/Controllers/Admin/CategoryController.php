@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use App\Models\PostCategory;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +33,10 @@ class CategoryController extends Controller
         //Query builder ile join işlemi
         //TODO:  tek fark model üzerindeki değerle gelmeyecektir
 
-     /*   $listCategory = DB::table('post_category')
-            ->join('users' ,'users.id','=','post_category.user_id')
-            ->select('post_category.*','users.name as userName')
-            ->get();*/
+        /*   $listCategory = DB::table('post_category')
+               ->join('users' ,'users.id','=','post_category.user_id')
+               ->select('post_category.*','users.name as userName')
+               ->get();*/
 
         return view('admin.category_list', compact('listCategory'));
     }
@@ -124,5 +125,34 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function changeStatus(Request $request)
+    {
+        try {
+            $categoryID = $request->id;
+            $category = PostCategory::find($categoryID);
+
+            $status = $category->status;
+
+            // kategori status değiştirme
+            $category->status = $status ? 0 : 1;
+
+            $category->save();
+
+            // kaydettikden sonra cevabı json olarak gönderdik
+
+            return response()->json([
+                'message' => 'Başarılı',
+                'status' => $status
+            ], 200);
+
+        } // hata durumunda
+        catch (\Exception $err) {
+            return response()->json([
+                'message' => 'Başarısız',
+                'status' => $status
+            ], 500);
+        }
     }
 }

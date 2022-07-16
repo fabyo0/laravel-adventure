@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\FrontController;
@@ -40,11 +41,20 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             return view('admin.post_list');
         })->name('admin.post.list');
 
-        Route::get('/tags',function (){
-           return view('admin.tag_list');
+        Route::get('/tags', function () {
+            return view('admin.tag_list');
         })->name('admin.tag.list');
 
-        Route::resource('category','Admin\CategoryController');
+        Route::resource('category', 'Admin\CategoryController');
+
+        // category
+
+       /* Route::post('/category/changeStatus', 'Admin\CategoryController@changeStatus')
+            ->name('admin.category.changeStatus');*/
+
+        Route::post('/category/changeStatus', 'Admin\CategoryController@changeStatus')
+            ->name('admin.category.changeStatus');
+
 
     });
 });

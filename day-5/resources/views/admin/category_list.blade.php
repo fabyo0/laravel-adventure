@@ -41,10 +41,10 @@
                                 <td>
                                     @if($item->status)
                                         <a class="waves-effect waves-light btn green changeStatus"
-                                        data-id = "{{ $item->id }}">Aktif</a>
+                                           data-id="{{ $item->id }}">Aktif</a>
                                     @else
                                         <a class="waves-effect waves-light btn red changeStatus"
-                                           data-id = "{{ $item->id }}">Pasif</a>
+                                           data-id="{{ $item->id }}">Pasif</a>
                                     @endif
 
                                 </td>
@@ -118,11 +118,10 @@
 </div>
 <!-- Modal Structure -->
 @section('js')
-    <script !src="">
+    <script>
 
-        $(document).ready(function (){
+        $(document).ready(function () {
             // category validate
-
             $('#btnSave').click(function () {
 
                 let name = $('#name').val();
@@ -139,15 +138,49 @@
                     $('#frmCategory').submit();
                 }
             });
+            //TODO: meta tag içerisine contente csrf token atayarak bir kere tanımlayarak
+            // tüm ajax işlemlerimiz de kullanabilriz
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
             //ajax ile status durum değiştirme
 
-            $('.changeStatus').click(function (){
-                    // data id tıklandığında
-                    let dataID = $(this).data('id');
-                    alert(dataID);
-            });
+            $('.changeStatus').click(function () {
 
+                let dataID = $(this).data('id');
+                let self = $(this);
+
+                $.ajax({
+                    url: '{{route('admin.category.changeStatus')}}',
+                    method: 'POST',
+                    data: {
+                        id: dataID,
+                        {{--//'_token': '{{ csrf_token() }}'--}}
+                    },
+                    success: function (response) {
+                        if (response.status === 1) {
+                            self[0].classList.remove('red');
+                            self[0].classList.add('green');
+                            self[0].innerHTML = 'Aktif';
+                        } else {
+                            self[0].classList.remove('green');
+                            self[0].classList.add('red');
+                            self[0].innerHTML = 'Pasif';
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Uyarı',
+                            text: dataID + " id'li kategorinin durumu şu anda " + self[0].innerText
+                                + " olarak güncellendi.",
+                            confirmButtonText: 'Tamam'
+                        });
+                    }
+                });
+            });
         });
     </script>
 @endsection
