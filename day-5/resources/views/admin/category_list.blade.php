@@ -20,6 +20,7 @@
                     <table class="responsive-table">
                         <thead>
                         <tr>
+                            <th>Eylem</th>
                             <th>ID</th>
                             <th>Kategori Adı</th>
                             <th>Açıklama</th>
@@ -32,7 +33,17 @@
                         <tbody>
                         {{-- kategori listesini table içerisine iterate ettik  --}}
                         @foreach($listCategory as $item)
-                            <tr>
+                            <tr id="row{{ $item->id }}">
+                                <td>
+                                    <a href="javascript:void(0)" class="deleteCategory"
+                                       data-id="{{ $item->id }}">
+                                        <i class="fas fa-trash red-text"></i>
+                                    </a>
+                                    <a href="#editCategory" class="editCategory modal-trigger"
+                                       data-id="{{ $item->id }}">
+                                        <i class="fas fa-edit blue-text"></i>
+                                    </a>
+                                </td>
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->description }}</td>
@@ -163,6 +174,7 @@
                     },
                     success: function (response) {
                         if (response.status === 1) {
+                            console.log(self[0]);
                             self[0].classList.remove('red');
                             self[0].classList.add('green');
                             self[0].innerHTML = 'Aktif';
@@ -173,14 +185,51 @@
                         }
                         Swal.fire({
                             icon: 'success',
-                            title: 'Uyarı',
-                            text: dataID + " id'li kategorinin durumu şu anda " + self[0].innerText
-                                + " olarak güncellendi.",
+                            title: 'Başarılı',
+                            text: "Kategori status durumu başarıyla değiştirildi...",
                             confirmButtonText: 'Tamam'
                         });
                     }
                 });
             });
+
+            // kategori silme
+            $('.deleteCategory').click(function () {
+
+                let dataID = $(this).data('id');
+                let self = $(this);
+
+                Swal.fire({
+                    title: 'Uyarı',
+                    text: ` ${dataID} ID'li kategoriyi silmek istediğinize emin misiniz?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Evet',
+                    cancelButtonText: 'Hayır silinmesin'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{route('admin.category.delete')}}',
+                            method: 'POST',
+                            data: {
+                                id: dataID,
+                            },
+                            success: function (response) {
+                                $('#row'+dataID).remove();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Başarılı',
+                                    text: "Kategori başarıyla silindi...",
+                                    confirmButtonText: 'Tamam'
+                                });
+                            }
+                        });
+                    }
+                })
+            });
+
         });
     </script>
 @endsection

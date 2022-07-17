@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\PostCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use SebastianBergmann\Diff\Exception;
 
 class CategoryController extends Controller
 {
@@ -144,7 +145,7 @@ class CategoryController extends Controller
 
             return response()->json([
                 'message' => 'Başarılı',
-                'status' => $status
+                'status' => $category->status
             ], 200);
 
         } // hata durumunda
@@ -154,5 +155,16 @@ class CategoryController extends Controller
                 'status' => $status
             ], 500);
         }
+    }
+
+    public function deleteCategory(Request $request)
+    {
+        $categoryID = $request->id;
+
+        PostCategory::where('id', $categoryID)->delete();
+
+        return response()->json([
+            'message' => 'Başarılı',
+        ], 200);
     }
 }
