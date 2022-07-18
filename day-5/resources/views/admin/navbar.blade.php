@@ -19,7 +19,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.tag.list') }}"><i class="material-icons dp48">view_list</i>
+                    <a href="{{ route('tag.index') }}"><i class="material-icons dp48">view_list</i>
                         <span class="hide-menu"> Etiket Listesi </span>
                     </a>
                 </li>

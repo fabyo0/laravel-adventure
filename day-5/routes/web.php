@@ -41,19 +41,18 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             return view('admin.post_list');
         })->name('admin.post.list');
 
-        Route::get('/tags', function () {
-            return view('admin.tag_list');
-        })->name('admin.tag.list');
+        // category
 
         Route::resource('category', 'Admin\CategoryController');
-
-        // category
 
         Route::post('/category/changeStatus', [CategoryController::class, 'changeStatus'])
             ->name('admin.category.changeStatus');
 
         Route::post('/category/delete', [CategoryController::class, 'deleteCategory'])
             ->name('admin.category.delete');
+
+        // tag
+        Route::resource('tag', 'Admin\TagController');
     });
 });
 
