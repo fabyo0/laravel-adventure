@@ -49,9 +49,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
         // category
 
-        /*  Route::post('/category/changeStatus', 'Admin\CategoryController@changeStatus')
-            ->name('admin.category.changeStatus');*/
-
         Route::post('/category/changeStatus', [CategoryController::class, 'changeStatus'])
             ->name('admin.category.changeStatus');
 

@@ -127,41 +127,115 @@
         </div>
     </div>
 </div>
+
+{{-- Edit Modal --}}
+<div id="editCategory" class="modal modalEdit">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col s12 l12">
+                <div class="card">
+                    <div class="card-content">
+                        <h5 class="card-title activator">Kategori Düzenleme</h5>
+                        <form id="editCategoryForm" action="" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input name="name" id="nameEdit" type="text">
+                                    <label for="nameEdit">Kategori Adı</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">email</i>
+                                    <input name="description" id="descriptionEdit" type="text">
+                                    <label for="descriptionEdit">Açıklama</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <div class="switch">
+                                        <label for="statusEdit">
+                                            Pasif
+                                            <input name="status" id="statusEdit" type="checkbox">
+                                            <span class="lever"></span>
+                                            Aktif
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <button id="btnEdit" class="btn green waves-effect btn-block" type="button">
+                                        Değişiklikleri Kaydet
+                                    </button>
+                                </div>
+                                <div class="input-field col s6">
+                                    <button class="btn red waves-effect btn-block modal-close" type="button">
+                                        Vazgeç
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- Edit Modal --}}
+
 <!-- Modal Structure -->
+
 @section('js')
     <script>
+        $(document).ready(function ()
+        {
+            function inputValidation(inputArray, formID)
+            {
+                let validation = true;
 
-        $(document).ready(function () {
-            // category validate
-            $('#btnSave').click(function () {
+                for (let i = 0; i < inputArray.length; i++)
+                {
+                    var inputInfo = inputArray[i];
+                    var input = $('#' + inputInfo.id ).val();
 
-                let name = $('#name').val();
+                    console.log(inputInfo);
 
-                if (name.trim() === '') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Uyarı',
-                        text: 'Lütfen kategori adını boş bırakmayınız!',
-                        confirmButtonText: 'Tamam'
-                    });
-
-                } else {
-                    $('#frmCategory').submit();
+                    if (input.trim() === "")
+                    {
+                        Swal.fire({
+                            icon: 'error',
+                            title: inputInfo.alertTitle,
+                            text: inputInfo.alertTextAttr + ' boş bırakılamaz!',
+                            confirmButtonText: 'Tamam'
+                        });
+                        validation = false;
+                    }
                 }
+                validation ? $('#' + formID).submit() : '';
+            }
+            $('#btnSave').click(function ()
+            {
+                let inputArray = [
+                    {
+                        id: 'name',
+                        alertTextAttr: 'Kategori Adı',
+                        alertTitle: "Uyarı",
+                    }
+                ];
+                inputValidation(inputArray, 'frmCategory');
             });
-            //TODO: meta tag içerisine contente csrf token atayarak bir kere tanımlayarak
-            // tüm ajax işlemlerimiz de kullanabilriz
-
+            //TODO: csrf token meta tag name değerine eşitleyerek tüm ajax işlemlerimizde kullanabilriz
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
-            //ajax ile status durum değiştirme
-
-            $('.changeStatus').click(function () {
-
+            $('.changeStatus').click(function ()
+            {
                 let dataID = $(this).data('id');
                 let self = $(this);
 
@@ -172,64 +246,115 @@
                         id: dataID,
                         {{--//'_token': '{{ csrf_token() }}'--}}
                     },
-                    success: function (response) {
-                        if (response.status === 1) {
-                            console.log(self[0]);
+                    async: false,
+                    success: function (response)
+                    {
+                        if (response.status === 1)
+                        {
                             self[0].classList.remove('red');
                             self[0].classList.add('green');
-                            self[0].innerHTML = 'Aktif';
-                        } else {
+                            self[0].innerText = "Aktif";
+                        }
+                        else
+                        {
                             self[0].classList.remove('green');
                             self[0].classList.add('red');
-                            self[0].innerHTML = 'Pasif';
+                            self[0].innerText = "Pasif";
                         }
                         Swal.fire({
                             icon: 'success',
-                            title: 'Başarılı',
-                            text: "Kategori status durumu başarıyla değiştirildi...",
+                            title: 'Uyarı',
+                            text: dataID + " id'li kategorinin durumu şu anda " + self[0].innerText
+                                + " olarak güncellendi.",
                             confirmButtonText: 'Tamam'
-                        });
+                        })
                     }
                 });
             });
-
-            // kategori silme
-            $('.deleteCategory').click(function () {
-
+            $('.deleteCategory').click(function ()
+            {
                 let dataID = $(this).data('id');
                 let self = $(this);
-
                 Swal.fire({
                     title: 'Uyarı',
-                    text: ` ${dataID} ID'li kategoriyi silmek istediğinize emin misiniz?`,
+                    text: `${dataID} ID'li kategoriyi silmek istediğinize emin misiniz?`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Evet',
-                    cancelButtonText: 'Hayır silinmesin'
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                    cancelButtonText: 'Hayır'
+                }).then((result) =>
+                {
+                    // onaylandığı durumda ilgi kategoriyi sildik
+                    if (result.isConfirmed)
+                    {
                         $.ajax({
                             url: '{{route('admin.category.delete')}}',
                             method: 'POST',
                             data: {
                                 id: dataID,
                             },
-                            success: function (response) {
-                                $('#row'+dataID).remove();
+                            async: false,
+                            success: function (response)
+                            {
+                                $('#row' + dataID).remove();
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Başarılı',
-                                    text: "Kategori başarıyla silindi...",
+                                    title: 'Uyarı',
+                                    text: dataID + " id'li kategorinin silindi",
                                     confirmButtonText: 'Tamam'
-                                });
+                                })
                             }
-                        });
+                        })
                     }
                 })
             });
+            $('.editCategory').click(function ()
+            {
+                let dataID = $(this).data('id');
+                let nameEdit = $('#nameEdit');
+                let descriptionEdit = $('#descriptionEdit');
+                let status = $('#statusEdit');
+                let self = $(this);
 
+                // TODO: route url de categoryEdit category ıD ile değiştirdik
+                let route = '{{ route('category.edit', ['category' => 'categoryEdit']) }}';
+                let routeUpdate = '{{ route('category.update', ['category' => 'categoryEdit']) }}';
+
+                route = route.replace('categoryEdit', dataID);
+                routeUpdate = routeUpdate.replace('categoryEdit', dataID);
+
+                $('#editCategoryForm').attr('action', routeUpdate);
+                $.ajax({
+                    url: route,
+                    method: 'GET',
+                    data: {
+                        id: dataID,
+                    },
+                    async: false,
+                    success: function (response)
+                    {
+                        $('label[for="nameEdit"]').addClass('active');
+                        $('label[for="descriptionEdit"]').addClass('active');
+                        let category = response.category;
+
+                        nameEdit.val(category.name);
+                        descriptionEdit.val(category.description);
+
+                        category.status ? status.attr('checked', true) :  status.attr('checked', false);
+                    }
+                });
+            });
+            $('#btnEdit').click(function ()
+            {
+                let inputArray = [{
+                    id: 'nameEdit',
+                    alertTitle: 'Uyarı',
+                    alertTextAttr: 'Kategori adı'
+                }];
+                inputValidation(inputArray, 'editCategoryForm');
+            });
         });
     </script>
 @endsection

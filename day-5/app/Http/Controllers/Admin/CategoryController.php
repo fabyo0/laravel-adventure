@@ -91,18 +91,23 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
+
     public function edit($id)
     {
-        //
+        // category id response olarak gönderildi
+        $category = PostCategory::find($id);
+
+        return response()->json([
+            'category' => $category
+        ], 200);
     }
 
     /**
@@ -110,11 +115,29 @@ class CategoryController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = PostCategory::find($id);
+
+        //Category name değerlerini request gelen değerlere eşitledik
+
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $status = $category->status;
+
+        // kategori status değiştirme
+        $category->status = $status ? 0 : 1;
+
+        $category->save();
+
+
+        alert()->success('Başarılı', 'Kategori başarıyla güncellendi...')
+            ->showConfirmButton('Tamam', '#3085d6');
+
+
+        return redirect()->route('category.index');
     }
 
     /**
