@@ -17,7 +17,7 @@ class TagController extends Controller
     public function index()
     {
         $listTags = Tag::all();
-        return  view('admin.tag_list',compact('listTags'));
+        return view('admin.tag_list', compact('listTags'));
     }
 
     /**
@@ -47,7 +47,7 @@ class TagController extends Controller
             'name' => $name,
             'status' => $status ? 1 : 0,
             'user_id' => $user->id
-            ];
+        ];
 
         Tag::create($data);
 
@@ -100,6 +100,6 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Tag::where('id', $id)->delete();
     }
 }
