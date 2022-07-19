@@ -1,4 +1,9 @@
 @extends('layouts.admin')
+
+@section('title')
+    Etiket Listesi
+@endsection
+
 @section('css')
 @endsection
 
@@ -209,13 +214,51 @@
                 }
             });
 
-            // kategori silme
+            // change status
 
-            $('.deleteTag').click(function(){
+            $('.changeStatus').click(function ()
+            {
+                let dataID = $(this).data('id');
+                let self = $(this);
+
+                $.ajax({
+                    url: '{{route('admin.tag.changeStatus')}}',
+                    method: 'POST',
+                    data: {
+                        id: dataID,
+                    },
+                    success: function (response)
+                    {
+                        console.log(response);
+                        if (response.status === 1)
+                        {
+                            self[0].classList.remove('red');
+                            self[0].classList.add('green');
+                            self[0].innerText = "Aktif";
+                        }
+                        else
+                        {
+                            self[0].classList.remove('green');
+                            self[0].classList.add('red');
+                            self[0].innerText = "Pasif";
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Uyarı',
+                            text: "Status başarıyla güncellendi...",
+                            confirmButtonText: 'Tamam'
+                        })
+                    }
+                });
+            });
+
+            // etiket silme
+
+            $('.deleteTag').click(function () {
                 let dataID = $(this).data('id');
 
                 let route = '{{route('tag.destroy', 'tagID')}}';
-                route = route.replace('tagID',dataID);
+                route = route.replace('tagID', dataID);
 
                 Swal.fire({
                     title: 'Uyarı',
@@ -226,24 +269,68 @@
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Evet',
                     cancelButtonText: 'Hayır'
-                }).then((result) =>
-                {
-                    if (result.isConfirmed)
-                    {
+                }).then((result) => {
+                    if (result.isConfirmed) {
                         $.ajax({
-                            url:route,
-                            method:'POST',
-                            data:{
-                                '_method' : 'DELETE'
+                            url: route,
+                            method: 'POST',
+                            data: {
+                                '_method': 'DELETE'
                             },
-                            success:function(response){
-                                document.getElementById("tag"+dataID).remove();
-                                console.log(response);
+                            success: function (response) {
+                                document.getElementById("tag" + dataID).remove();
                             }
                         });
                     }
                 });
             });
+
+            // etiket düzenleme
+
+            $('.editTag').click(function () {
+                let dataID = $(this).data('id');
+                let nameEdit = $('#nameEdit');
+                let status = $('#statusEdit');
+                let self = $(this);
+
+                // TODO: route url de tagEdit category ıD ile değiştirdik
+                let route = '{{ route('tag.edit', ['tag' => 'tagEdit']) }}';
+                let routeUpdate = '{{ route('tag.update', ['tag' => 'tagEdit']) }}';
+
+                route = route.replace('tagEdit', dataID);
+                routeUpdate = routeUpdate.replace('tagEdit', dataID);
+
+                $('#editTagForm').attr('action', routeUpdate);
+
+                $.ajax({
+                    url: route,
+                    method: 'GET',
+                    data: {
+                        id: dataID,
+                    },
+                    success: function (response) {
+
+                        $('label[for="nameEdit"]').addClass('active');
+
+                        let tag = response.tag;
+                        nameEdit.val(tag.name);
+                        tag.status ? status.attr('checked', true) : status.attr('checked', false);
+                    }
+                });
+            });
+
+            $('#btnEdit').click(function () {
+
+                let inputArray = [{
+                    id: 'nameEdit',
+                    alertTitle: 'Uyarı',
+                    alertTextAttr: 'Etiket adı'
+                }];
+                inputValidation(inputArray, 'editTagForm');
+            });
+
         });
+
+
     </script>
 @endsection

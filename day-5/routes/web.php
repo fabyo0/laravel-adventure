@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\FrontController;
@@ -53,6 +54,13 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
         // tag
         Route::resource('tag', 'Admin\TagController');
+
+        Route::post('/tag/changeStatus', [TagController::class, 'changeStatus'])
+            ->name('admin.tag.changeStatus');
+
+
+        // post
+        Route::resource('post','Admin\PostController');
     });
 });
 

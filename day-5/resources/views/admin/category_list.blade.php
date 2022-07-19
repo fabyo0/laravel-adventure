@@ -234,6 +234,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $('.changeStatus').click(function ()
             {
                 let dataID = $(this).data('id');
@@ -244,7 +245,6 @@
                     method: 'POST',
                     data: {
                         id: dataID,
-                        {{--//'_token': '{{ csrf_token() }}'--}}
                     },
                     async: false,
                     success: function (response)
@@ -295,7 +295,6 @@
                             data: {
                                 id: dataID,
                             },
-                            async: false,
                             success: function (response)
                             {
                                 $('#row' + dataID).remove();
@@ -332,7 +331,6 @@
                     data: {
                         id: dataID,
                     },
-                    async: false,
                     success: function (response)
                     {
                         $('label[for="nameEdit"]').addClass('active');
